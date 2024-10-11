@@ -596,6 +596,7 @@ class RegistrationForResidentViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
     
+    
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_personal_data(request):
