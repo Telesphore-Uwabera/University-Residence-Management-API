@@ -1,5 +1,9 @@
-from venv import logger
+import logging
 from django.http import JsonResponse
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 import logging
