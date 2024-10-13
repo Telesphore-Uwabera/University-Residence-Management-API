@@ -41,6 +41,7 @@ REST_FRAMEWORK = {
 }
 
 # Application definition
+import encrypted_model_fields
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -52,10 +53,41 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'core',
-    'drf_yasg'
-
+    'drf_yasg',
+    'django.contrib.sites',  # Only one occurrence of 'django.contrib.sites'
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'encrypted_model_fields',  # Ensure this has a comma
+    'dj_rest_auth',  # Ensure this is correctly listed
+    'dj_rest_auth.registration',
 ]
 
+
+SITE_ID = 1
+
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+# Configure site ID
+SITE_ID = 1
+
+# Configure allauth settings
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_UNIQUE_EMAIL = True
+
+# Add REST framework settings for token authentication
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
 # Logging Configuration
 LOGGING = {
     'version': 1,
@@ -76,6 +108,18 @@ LOGGING = {
     },
 }
 
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+    }
+}
+
 # OAuth toolkit configuration
 OAUTH2_PROVIDER = {
     'ACCESS_TOKEN_EXPIRE_SECONDS': 36000,
@@ -89,9 +133,12 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',  # Add this line
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
+
 
 ROOT_URLCONF = 'resident_management.urls'
 

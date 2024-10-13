@@ -27,9 +27,12 @@ user_actions = UserViewSet.as_view({
 login_action = UserViewSet.as_view({
     'post': 'login'
 })
-
+user_list = UserViewSet.as_view({'post': 'google_login'})
+from django.urls import path
+from .views import UserViewSet
 urlpatterns = [
     path('', include(router.urls)), 
     path('register/', user_actions, name='register'),  
-    path('login/', login_action, name='login'),        
+    path('login/', login_action, name='login'),  
+    path('auth/google/', user_list, name='google_login'),      
 ]
