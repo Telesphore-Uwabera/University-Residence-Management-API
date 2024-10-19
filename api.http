@@ -1,0 +1,374 @@
+
+### Register a new user
+POST http://127.0.0.1:8000/api/register/
+Content-Type: application/json
+
+{
+  "username": "LAIS",
+  "email": "LAIS@gmail.com",
+  "password": "strinDg"
+}
+
+
+### Login User (Assuming you have this endpoint)
+POST http://127.0.0.1:8000/api/login/
+Content-Type: application/json
+
+{
+  "username": "bDFutera",
+  "password": "string"
+}
+
+### token = a6c7a66db622a6fceb362eeae424e5239d3faf30
+
+
+
+
+
+
+### Create a Building
+POST http://localhost:8000/api/buildings/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+    "name": "Building B",
+    "address": "1234 Main St"
+}
+
+### Get all Buildings
+GET http://localhost:8000/api/buildings/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Get a specific Building by ID
+GET http://localhost:8000/api/buildings/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Update a Building
+PUT http://localhost:8000/api/buildings/3/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+    "name": "Building B Updated",
+    "address": "456 Main St"
+}
+
+### Delete a Building
+DELETE http://localhost:8000/api/buildings/2/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+
+
+
+### Create a Room
+POST http://localhost:8000/api/rooms/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+  "number": "1002",
+  "type": "single",
+  "is_occupied": true,
+  "building": 1
+}
+
+### Get all Rooms
+GET http://localhost:8000/api/rooms/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Get a specific Room by ID
+GET http://localhost:8000/api/rooms/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Update a Room
+PUT http://localhost:8000/api/rooms/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+  "number": "1001",
+  "type": "single",
+  "is_occupied": true,
+  "building": 1
+}
+
+### Delete a Room
+DELETE http://localhost:8000/api/rooms/5/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+
+
+
+### Create a Resident
+POST http://localhost:8000/api/residents/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+  "user": 1,
+  "room": 8
+}
+
+### Get all Residents
+GET http://localhost:8000/api/residents/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Get a specific Resident by ID
+GET http://localhost:8000/api/residents/3/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Update a Resident
+PUT http://localhost:8000/api/residents/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+  "user": 2,
+  "room": 8
+}
+
+### Delete a Resident
+DELETE http://localhost:8000/api/residents/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+
+
+
+### Create a Maintenance Request
+POST http://localhost:8000/api/maintenance-requests/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+  "issue": "string",
+  "priority": "low",
+  "status": "string",
+  "location": 1
+}
+
+### Get all Maintenance Requests
+GET http://localhost:8000/api/maintenance-requests/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Get a specific Maintenance Request by ID
+GET http://localhost:8000/api/maintenance-requests/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Update a Maintenance Request
+PUT http://localhost:8000/api/maintenance-requests/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+      "issue": "string",
+      "priority": "low",
+      "status": "string",
+      "location": 1
+}
+
+### Delete a Maintenance Request
+DELETE http://localhost:8000/api/maintenance-requests/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+
+
+
+
+### Create an Event
+POST http://localhost:8000/api/events/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+    "title": "Monthly Meeting",
+    "description": "Discussion about upcoming events.",
+    "date": "2024-10-20T10:00:00Z",
+    "location": 1
+}
+
+### Get all Events
+GET http://localhost:8000/api/events/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Get a specific Event by ID
+GET http://localhost:8000/api/events/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Update an Event
+PUT http://localhost:8000/api/events/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+    "title": "Monthly Meeting Updated",
+    "description": "Updated agenda.",
+    "date": "2024-10-21T10:00:00Z",
+    "location": 1
+}
+
+### Delete an Event
+DELETE http://localhost:8000/api/events/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+
+
+
+### Create an Announcement
+POST http://localhost:8000/api/announcements/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+    "title": "Important Notice",
+    "message": "The water will be shut off for maintenance."
+}
+
+### Get all Announcements
+GET http://localhost:8000/api/announcements/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Get a specific Announcement by ID
+GET http://localhost:8000/api/announcements/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Update an Announcement
+PUT http://localhost:8000/api/announcements/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+    "title": "Updated Notice",
+    "message": "The water will be shut off for maintenance on Friday."
+}
+
+### Delete an Announcement
+DELETE http://localhost:8000/api/announcements/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+
+
+### Create a Communication
+POST http://localhost:8000/api/communications/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+    "resident": 4,
+    "message": "Hello, I have a question about my room."
+}
+
+### Get all Communications
+GET http://localhost:8000/api/communications/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Get a specific Communication by ID
+GET http://localhost:8000/api/communications/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Update a Communication
+PUT http://localhost:8000/api/communications/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+    "resident": 1,
+    "message": "Updated message about my room."
+}
+
+### Delete a Communication
+DELETE http://localhost:8000/api/communications/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+
+
+### Create a Registration for Resident
+POST http://localhost:8000/api/registrations/
+Content-Type: application/json
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+
+
+{
+      "resident": 6,
+      "room": 8,
+      "application_date": "2024-10-18T16:07:44.665750Z",
+      "status": "Pending"
+}
+
+### Get all Registrations
+GET http://localhost:8000/api/registrations/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Get a specific Registration by ID
+GET http://localhost:8000/api/registrations/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Update a Registration
+PUT http://localhost:8000/api/registrations/{id}/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+      "resident": 6,
+      "room": 8,
+      "application_date": "2024-10-18T16:07:44.665750Z",
+      "status": "Pending"
+}
+
+### Delete a Registration
+DELETE http://localhost:8000/api/registrations/{id}/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+
+
+
+### Create a Payment
+POST http://localhost:8000/api/payments/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+  "resident": 6,
+  "month": "January",
+  "year": 2024,
+  "amount": 100
+}
+
+### Get all Payments
+GET http://localhost:8000/api/payments/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Get a specific Payment by ID
+GET http://localhost:8000/api/payments/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Accept: application/json
+
+### Update a Payment
+PUT http://localhost:8000/api/payments/1/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Content-Type: application/json
+
+{
+  "resident": 6,
+  "month": "January",
+  "year": 2024,
+  "amount": 100
+}
+
+### Delete a Payment
+DELETE http://localhost:8000/api/payments/{id}/
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+
+
+
+
+

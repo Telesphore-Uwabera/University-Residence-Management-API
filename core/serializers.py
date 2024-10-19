@@ -89,8 +89,8 @@ class CommunicationSerializer(serializers.ModelSerializer):
 class RegistrationForResidentSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegistrationForResident
-        fields = ['id', 'resident', 'room', 'application_date', 'status']  # Include 'id' for easy reference
-
+        fields = ['id', 'resident', 'room', 'application_date', 'status']
+        read_only_fields = ['application_date'] 
 
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:

@@ -10,7 +10,7 @@ import logging
 from .encryption import encrypt_data, decrypt_data
 from .anonymization import anonymize_data
 from rest_framework import viewsets
-from .models import Building, Room, Resident, MaintenanceRequest, Event, Announcement, Communication, Resident, Payment
+from .models import Building, Room, Resident, MaintenanceRequest, Event, Announcement, Communication, Resident, Payment, RegistrationForResident
 from .serializers import (
     BuildingSerializer, RoomSerializer, ResidentSerializer,
     MaintenanceRequestSerializer, EventSerializer, AnnouncementSerializer,
@@ -578,59 +578,94 @@ class CommunicationViewSet(viewsets.ModelViewSet):
 
 # ViewSet for RegistrationForResident
 class RegistrationForResidentViewSet(viewsets.ModelViewSet):
-    queryset = Resident.objects.all()  # Assuming this is where the residents are managed
-    serializer_class = RegistrationForResidentSerializer  # Assuming you have created this serializer
+    queryset = RegistrationForResident.objects.all()
+    serializer_class = RegistrationForResidentSerializer
+    # permission_classes = [IsAuthenticated]  
 
     @swagger_auto_schema(
         operation_summary="List all resident registrations",
-        operation_description="Retrieve a list of all resident registrations."
+        operation_description="Retrieve a list of all resident registrations.",
+        responses={status.HTTP_200_OK: RegistrationForResidentSerializer(many=True)}
     )
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        registrations = self.get_queryset()
+        serializer = self.get_serializer(registrations, many=True)
+        return Response({"message": "Resident registrations retrieved successfully.", "data": serializer.data}, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Create a new resident registration",
         operation_description="Register a new resident in the system.",
         request_body=RegistrationForResidentSerializer,
-        responses={status.HTTP_201_CREATED: RegistrationForResidentSerializer}
+        responses={
+            status.HTTP_201_CREATED: RegistrationForResidentSerializer,
+            status.HTTP_400_BAD_REQUEST: "Bad Request - Invalid input"
+        }
     )
     def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        registration = serializer.save()  
+        return Response({"message": "Resident registration created successfully.", "data": RegistrationForResidentSerializer(registration).data}, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
         operation_summary="Retrieve a resident registration",
         operation_description="Retrieve a specific resident registration by its ID.",
-        responses={status.HTTP_200_OK: RegistrationForResidentSerializer}
+        responses={
+            status.HTTP_200_OK: RegistrationForResidentSerializer,
+            status.HTTP_404_NOT_FOUND: "Not Found - Registration does not exist"
+        }
     )
     def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+        registration = self.get_object()  
+        serializer = self.get_serializer(registration)
+        return Response({"message": "Resident registration retrieved successfully.", "data": serializer.data}, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Update a resident registration",
         operation_description="Update an existing resident registration.",
         request_body=RegistrationForResidentSerializer,
-        responses={status.HTTP_200_OK: RegistrationForResidentSerializer}
+        responses={
+            status.HTTP_200_OK: RegistrationForResidentSerializer,
+            status.HTTP_400_BAD_REQUEST: "Bad Request - Invalid input",
+            status.HTTP_404_NOT_FOUND: "Not Found - Registration does not exist"
+        }
     )
     def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+        registration = self.get_object()  
+        serializer = self.get_serializer(registration, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        updated_registration = serializer.save()  
+        return Response({"message": "Resident registration updated successfully.", "data": RegistrationForResidentSerializer(updated_registration).data}, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
-        operation_summary="Partial update a resident registration",
+        operation_summary="Partially update a resident registration",
         operation_description="Partially update a resident registration.",
         request_body=RegistrationForResidentSerializer,
-        responses={status.HTTP_200_OK: RegistrationForResidentSerializer}
+        responses={
+            status.HTTP_200_OK: RegistrationForResidentSerializer,
+            status.HTTP_400_BAD_REQUEST: "Bad Request - Invalid input",
+            status.HTTP_404_NOT_FOUND: "Not Found - Registration does not exist"
+        }
     )
     def partial_update(self, request, *args, **kwargs):
-        return super().partial_update(request, *args, **kwargs)
+        registration = self.get_object() 
+        serializer = self.get_serializer(registration, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        updated_registration = serializer.save()  
+        return Response({"message": "Resident registration partially updated successfully.", "data": RegistrationForResidentSerializer(updated_registration).data}, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Delete a resident registration",
-        operation_description="Delete a specific resident registration by its ID."
+        operation_description="Delete a specific resident registration by its ID.",
+        responses={
+            status.HTTP_204_NO_CONTENT: "No Content - Registration deleted successfully",
+            status.HTTP_404_NOT_FOUND: "Not Found - Registration does not exist"
+        }
     )
     def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
-    
-    
+        registration = self.get_object() 
+        registration.delete()  
+        return Response({"message": "Resident registration deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_personal_data(request):
