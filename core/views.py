@@ -364,9 +364,7 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
 
-# class AnnouncementViewSet(viewsets.ModelViewSet):
-#     queryset = Announcement.objects.all()
-#     serializer_class = AnnouncementSerializer
+
 
 # User ViewSet for registration and login
 
@@ -375,96 +373,64 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_list_or_404
 from rest_framework.authtoken.models import Token
 
-# class UserViewSet(viewsets.ViewSet):
-#     @swagger_auto_schema(
-#         operation_summary='Register users',
-#         operation_description="Register new users in the system.",
-#         request_body=openapi.Schema(
-#             type=openapi.TYPE_OBJECT,
-#             properties={
-#                 'username': openapi.Schema(type=openapi.TYPE_STRING),
-#                 'email': openapi.Schema(type=openapi.TYPE_STRING),
-#                 'password': openapi.Schema(type=openapi.TYPE_STRING, format=openapi.FORMAT_PASSWORD)
-#             },
-#             required=['username', 'email', 'password']
-#         )
-#     )
-
-#     @action(detail=False, methods=['post'])
-#     def register(self, request):
-#         serializer = SignupSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             user = User.objects.get(username=serializer.data['username'])
-#             user.set_password(request.data['password'])
-#             user.save()
-#             token = Token.objects.create(user = user)
-#             return Response({
-#                 'status': 'user successful register',
-#                 "user":serializer.data,
-#                 'token': token.key}, 
-#                 status=status.HTTP_201_CREATED)
-#         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
-
-#     @swagger_auto_schema(
-#         operation_summary='Login users',
-#         operation_description="Log in existing users.",
-#         request_body=openapi.Schema(
-#             type=openapi.TYPE_OBJECT,
-#             properties={
-#                 'username': openapi.Schema(type=openapi.TYPE_STRING),
-#                 'password': openapi.Schema(type=openapi.TYPE_STRING, format=openapi.FORMAT_PASSWORD)
-#             },
-#             required=['username', 'password']
-#         )
-#     )
-#     @action(detail=False, methods=['post'])
-#     def login(self, request):
-#         serializer = LoginSerializer(data=request.data)
-#         if serializer.is_valid():
-#             user = serializer.validated_data['user']
-#             user.set_password(request.data['password'])
-#             user.save()
-#             token, create = Token.objects.get_or_create(user=user)
-#             return Response({
-#                 'status': 'login successful',
-#                 'token': token.key,
-#                 'user': LoginSerializer(user).data
-#             }, status=status.HTTP_200_OK)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from dj_rest_auth.registration.views import SocialLoginView
-from rest_framework.decorators import action
-from rest_framework import viewsets
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-from rest_framework.response import Response
-
-class GoogleLogin(SocialLoginView):
-    adapter_class = GoogleOAuth2Adapter
-
 class UserViewSet(viewsets.ViewSet):
-    # Define the input expected for the Google login in Swagger
-    google_token_param = openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        properties={
-            'access_token': openapi.Schema(type=openapi.TYPE_STRING, description='Google OAuth2 access token'),
-        },
-        required=['access_token'],
+    @swagger_auto_schema(
+        operation_summary='Register users',
+        operation_description="Register new users in the system.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING),
+                'email': openapi.Schema(type=openapi.TYPE_STRING),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, format=openapi.FORMAT_PASSWORD)
+            },
+            required=['username', 'email', 'password']
+        )
     )
+
+    @action(detail=False, methods=['post'])
+    def register(self, request):
+        serializer = SignupSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            user = User.objects.get(username=serializer.data['username'])
+            user.set_password(request.data['password'])
+            user.save()
+            token = Token.objects.create(user = user)
+            return Response({
+                'status': 'user successful register',
+                "user":serializer.data,
+                'token': token.key}, 
+                status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
-        operation_summary='Login with Google',
-        operation_description="Log in users using Google authentication.",
-        request_body=google_token_param,
-        responses={200: 'OK', 400: 'Bad Request'},
+        operation_summary='Login users',
+        operation_description="Log in existing users.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, format=openapi.FORMAT_PASSWORD)
+            },
+            required=['username', 'password']
+        )
     )
-    @action(detail=False, methods=['post'], url_path='google-login')
-    def google_login(self, request):
-        # Call GoogleLogin view to handle the request
-        response = GoogleLogin.as_view()(request._request)  # Accessing Django's WSGIRequest from DRF's request
-        return Response(response.data, status=response.status_code)
+    @action(detail=False, methods=['post'])
+    def login(self, request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data['user']
+            user.set_password(request.data['password'])
+            user.save()
+            token, create = Token.objects.get_or_create(user=user)
+            return Response({
+                'status': 'login successful',
+                'token': token.key,
+                'user': LoginSerializer(user).data
+            }, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class PaymentViewSet(viewsets.ModelViewSet):
