@@ -28,7 +28,7 @@ Content-Type: application/json
 
 ### Create a Building
 POST http://localhost:8000/api/buildings/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -38,17 +38,17 @@ Content-Type: application/json
 
 ### Get all Buildings
 GET http://localhost:8000/api/buildings/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Get a specific Building by ID
 GET http://localhost:8000/api/buildings/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Update a Building
 PUT http://localhost:8000/api/buildings/3/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -58,13 +58,13 @@ Content-Type: application/json
 
 ### Delete a Building
 DELETE http://localhost:8000/api/buildings/2/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 
 
 
 ### Create a Room
 POST http://localhost:8000/api/rooms/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -76,17 +76,17 @@ Content-Type: application/json
 
 ### Get all Rooms
 GET http://localhost:8000/api/rooms/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Get a specific Room by ID
 GET http://localhost:8000/api/rooms/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Update a Room
 PUT http://localhost:8000/api/rooms/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -98,13 +98,13 @@ Content-Type: application/json
 
 ### Delete a Room
 DELETE http://localhost:8000/api/rooms/5/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 
 
 
 ### Create a Resident
 POST http://localhost:8000/api/residents/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -114,17 +114,17 @@ Content-Type: application/json
 
 ### Get all Residents
 GET http://localhost:8000/api/residents/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Get a specific Resident by ID
 GET http://localhost:8000/api/residents/3/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Update a Resident
 PUT http://localhost:8000/api/residents/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -134,13 +134,13 @@ Content-Type: application/json
 
 ### Delete a Resident
 DELETE http://localhost:8000/api/residents/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 
 
 
 ### Create a Maintenance Request
 POST http://localhost:8000/api/maintenance-requests/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -152,17 +152,17 @@ Content-Type: application/json
 
 ### Get all Maintenance Requests
 GET http://localhost:8000/api/maintenance-requests/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Get a specific Maintenance Request by ID
 GET http://localhost:8000/api/maintenance-requests/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Update a Maintenance Request
 PUT http://localhost:8000/api/maintenance-requests/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -174,14 +174,14 @@ Content-Type: application/json
 
 ### Delete a Maintenance Request
 DELETE http://localhost:8000/api/maintenance-requests/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 
 
 
 
 ### Create an Event
 POST http://localhost:8000/api/events/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -193,17 +193,17 @@ Content-Type: application/json
 
 ### Get all Events
 GET http://localhost:8000/api/events/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Get a specific Event by ID
 GET http://localhost:8000/api/events/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Update an Event
 PUT http://localhost:8000/api/events/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -215,13 +215,13 @@ Content-Type: application/json
 
 ### Delete an Event
 DELETE http://localhost:8000/api/events/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 
 
 
 ### Create an Announcement
 POST http://localhost:8000/api/announcements/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -231,17 +231,17 @@ Content-Type: application/json
 
 ### Get all Announcements
 GET http://localhost:8000/api/announcements/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Get a specific Announcement by ID
 GET http://localhost:8000/api/announcements/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Update an Announcement
 PUT http://localhost:8000/api/announcements/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -251,12 +251,12 @@ Content-Type: application/json
 
 ### Delete an Announcement
 DELETE http://localhost:8000/api/announcements/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 
 
 ### Create a Communication
 POST http://localhost:8000/api/communications/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -266,17 +266,17 @@ Content-Type: application/json
 
 ### Get all Communications
 GET http://localhost:8000/api/communications/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Get a specific Communication by ID
 GET http://localhost:8000/api/communications/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Update a Communication
 PUT http://localhost:8000/api/communications/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -286,13 +286,13 @@ Content-Type: application/json
 
 ### Delete a Communication
 DELETE http://localhost:8000/api/communications/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 
 
 ### Create a Registration for Resident
 POST http://localhost:8000/api/registrations/
 Content-Type: application/json
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 
 
 {
@@ -304,17 +304,17 @@ Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 
 ### Get all Registrations
 GET http://localhost:8000/api/registrations/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Get a specific Registration by ID
 GET http://localhost:8000/api/registrations/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Update a Registration
 PUT http://localhost:8000/api/registrations/{id}/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -326,13 +326,13 @@ Content-Type: application/json
 
 ### Delete a Registration
 DELETE http://localhost:8000/api/registrations/{id}/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 
 
 
 ### Create a Payment
 POST http://localhost:8000/api/payments/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -344,17 +344,17 @@ Content-Type: application/json
 
 ### Get all Payments
 GET http://localhost:8000/api/payments/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Get a specific Payment by ID
 GET http://localhost:8000/api/payments/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Update a Payment
 PUT http://localhost:8000/api/payments/1/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Content-Type: application/json
 
 {
@@ -366,7 +366,7 @@ Content-Type: application/json
 
 ### Delete a Payment
 DELETE http://localhost:8000/api/payments/{id}/
-Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 
 
 
