@@ -4,9 +4,9 @@ POST http://127.0.0.1:8000/api/register/
 Content-Type: application/json
 
 {
-  "username": "LAIS",
-  "email": "LAIS@gmail.com",
-  "password": "strinDg"
+  "username": "kaliza",
+  "email": "kaliza@gmail.com",
+  "password": "kaliza"
 }
 
 
@@ -15,8 +15,8 @@ POST http://127.0.0.1:8000/api/login/
 Content-Type: application/json
 
 {
-  "username": "bDFutera",
-  "password": "string"
+  "username": "kaliza",
+  "password": "kaliza"
 }
 
 ### token = a6c7a66db622a6fceb362eeae424e5239d3faf30
@@ -28,7 +28,7 @@ Content-Type: application/json
 
 ### Create a Building
 POST http://localhost:8000/api/buildings/
-# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+# Authorization: Token 8a2503c7a5740cd565645a6f42b96f428616b85f
 Content-Type: application/json
 
 {
@@ -64,7 +64,7 @@ DELETE http://localhost:8000/api/buildings/2/
 
 ### Create a Room
 POST http://localhost:8000/api/rooms/
-# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Authorization: Token 8a2503c7a5740cd565645a6f42b96f428616b85f
 Content-Type: application/json
 
 {
@@ -104,7 +104,7 @@ DELETE http://localhost:8000/api/rooms/5/
 
 ### Create a Resident
 POST http://localhost:8000/api/residents/
-# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Authorization: Token 8a2503c7a5740cd565645a6f42b96f428616b85f
 Content-Type: application/json
 
 {
@@ -114,17 +114,17 @@ Content-Type: application/json
 
 ### Get all Residents
 GET http://localhost:8000/api/residents/
-# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Authorization: Token 8a2503c7a5740cd565645a6f42b96f428616b85f
 Accept: application/json
 
 ### Get a specific Resident by ID
 GET http://localhost:8000/api/residents/3/
-# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 Accept: application/json
 
 ### Update a Resident
 PUT http://localhost:8000/api/residents/1/
-# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Authorization: Token 8a2503c7a5740cd565645a6f42b96f428616b85f
 Content-Type: application/json
 
 {

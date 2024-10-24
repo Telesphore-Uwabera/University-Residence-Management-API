@@ -26,11 +26,11 @@ from rest_framework.permissions import IsAuthenticated
 )
 
 
-@method_decorator(csrf_exempt, name='dispatch')
+# @method_decorator(csrf_exempt, name='dispatch')
 class BuildingViewSet(viewsets.ModelViewSet):
     queryset = Building.objects.all()
     serializer_class = BuildingSerializer
-    permission_classes = [permissions.IsAuthenticated]  
+    # permission_classes = [permissions.IsAuthenticated]  
 
     @swagger_auto_schema(
         operation_summary="List all buildings",
