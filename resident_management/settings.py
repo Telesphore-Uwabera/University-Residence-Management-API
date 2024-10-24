@@ -29,6 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
 REST_FRAMEWORK = {
     "NON_FIELD_ERRORS_KEY":"errors",
     #  "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -42,6 +43,9 @@ REST_FRAMEWORK = {
 
 # Application definition
 import encrypted_model_fields
+
+# Configure site ID
+SITE_ID = 1
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -73,8 +77,7 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-# Configure site ID
-SITE_ID = 1
+
 
 # Configure allauth settings
 ACCOUNT_EMAIL_REQUIRED = True
@@ -110,6 +113,11 @@ LOGGING = {
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
+        # 'APP': {
+        #     'client_id': '<your-google-client-id>',
+        #     'secret': '<your-google-client-secret>',
+        #     'key': ''  # Leave this empty if not needed
+        # },
         'SCOPE': [
             'profile',
             'email',
@@ -117,6 +125,7 @@ SOCIALACCOUNT_PROVIDERS = {
         'AUTH_PARAMS': {
             'access_type': 'online',
         },
+        # 'OAUTH_PKCE_ENABLED': True,  # Enable PKCE (Proof Key for Code Exchange) for enhanced security
     }
 }
 
@@ -220,3 +229,10 @@ print(key.decode())  # This will print a 32-byte base64-encoded key
 
 FIELD_ENCRYPTION_KEY = 'x3D3JBv2FhhjWc4R4A9xALYL8dAcPT2L1jE4ASivRjU='
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',  # Default authentication backend
+    'allauth.account.auth_backends.AuthenticationBackend',  # Allauth for social authentication
+)
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
