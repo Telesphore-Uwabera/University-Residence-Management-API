@@ -1,15 +1,5 @@
-import logging
-from django.http import JsonResponse
-
-# Configure logging
-logger = logging.getLogger(__name__)
-
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-import logging
-from .encryption import encrypt_data, decrypt_data
-from .anonymization import anonymize_data
 from rest_framework import viewsets
+from rest_framework.response import Response
 from .models import Building, Room, Resident, MaintenanceRequest, Event, Announcement, Communication, Resident, Payment, RegistrationForResident
 from .serializers import (
     BuildingSerializer, RoomSerializer, ResidentSerializer,
@@ -19,10 +9,14 @@ from .serializers import (
     RegistrationForResidentSerializer,
     CommunicationSerializer
 )
-from rest_framework import status
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.permissions import IsAuthenticated
+
 
 # ViewSets for the models
 
@@ -30,9 +24,30 @@ from drf_yasg.utils import swagger_auto_schema
     operation_summary="List all buildings",
     operation_description="Retrieve a list of all buildings."
 )
+
+
+@method_decorator(csrf_exempt, name='dispatch')
 class BuildingViewSet(viewsets.ModelViewSet):
     queryset = Building.objects.all()
     serializer_class = BuildingSerializer
+    permission_classes = [permissions.IsAuthenticated]  
+
+    @swagger_auto_schema(
+        operation_summary="List all buildings",
+        operation_description="Retrieve a list of all buildings."
+    )
+    def list(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            print(f"Authenticated user: {request.user.username}")
+        else:
+            print("User is not authenticated")
+        
+        buildings = self.queryset
+        serializer = self.get_serializer(buildings, many=True)
+        return Response({
+            "message": "Buildings retrieved successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Create a new building",
@@ -41,7 +56,13 @@ class BuildingViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_201_CREATED: BuildingSerializer}
     )
     def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response({
+            "message": "Building created successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
         operation_summary="Retrieve a building",
@@ -49,7 +70,12 @@ class BuildingViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_200_OK: BuildingSerializer}
     )
     def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+        building = self.get_object()
+        serializer = self.get_serializer(building)
+        return Response({
+            "message": "Building retrieved successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Update a building",
@@ -58,7 +84,14 @@ class BuildingViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_200_OK: BuildingSerializer}
     )
     def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+        building = self.get_object()
+        serializer = self.get_serializer(building, data=request.data, partial=False)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response({
+            "message": "Building updated successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Partial update a building",
@@ -67,24 +100,38 @@ class BuildingViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_200_OK: BuildingSerializer}
     )
     def partial_update(self, request, *args, **kwargs):
-        return super().partial_update(request, *args, **kwargs)
+        building = self.get_object()
+        serializer = self.get_serializer(building, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response({
+            "message": "Building partially updated successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Delete a building",
         operation_description="Delete a specific building by its ID."
     )
     def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
+        building = self.get_object()
+        self.perform_destroy(building)
+        return Response({
+            "message": "Building deleted successfully."
+        }, status=status.HTTP_204_NO_CONTENT)
 
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
+    permission_classes = [permissions.IsAuthenticated]  
 
     @swagger_auto_schema(
         operation_summary="List all rooms",
         operation_description="Retrieve a list of all rooms."
     )
     def list(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            print(f"Authenticated user: {request.user.username}")
         return super().list(request, *args, **kwargs)
 
     @swagger_auto_schema(
@@ -128,22 +175,24 @@ class RoomViewSet(viewsets.ModelViewSet):
     )
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
-
-# class RoomViewSet(viewsets.ModelViewSet):
-#     queryset = Room.objects.all()
-#     serializer_class = RoomSerializer
-
+    
 
 class ResidentViewSet(viewsets.ModelViewSet):
     queryset = Resident.objects.all()
     serializer_class = ResidentSerializer
+    permission_classes = [permissions.IsAuthenticated]  
 
     @swagger_auto_schema(
         operation_summary="List all residents",
         operation_description="Retrieve a list of all residents."
     )
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        residents = self.queryset
+        serializer = self.get_serializer(residents, many=True)
+        return Response({
+            "message": "Residents retrieved successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Create a new resident",
@@ -152,7 +201,13 @@ class ResidentViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_201_CREATED: ResidentSerializer}
     )
     def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response({
+            "message": "Resident created successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
         operation_summary="Retrieve a resident",
@@ -160,7 +215,12 @@ class ResidentViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_200_OK: ResidentSerializer}
     )
     def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+        resident = self.get_object()
+        serializer = self.get_serializer(resident)
+        return Response({
+            "message": "Resident retrieved successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Update a resident",
@@ -169,7 +229,14 @@ class ResidentViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_200_OK: ResidentSerializer}
     )
     def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+        resident = self.get_object()
+        serializer = self.get_serializer(resident, data=request.data, partial=False)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response({
+            "message": "Resident updated successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Partial update a resident",
@@ -178,32 +245,32 @@ class ResidentViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_200_OK: ResidentSerializer}
     )
     def partial_update(self, request, *args, **kwargs):
-        return super().partial_update(request, *args, **kwargs)
+        resident = self.get_object()
+        serializer = self.get_serializer(resident, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response({
+            "message": "Resident partially updated successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Delete a resident",
         operation_description="Delete a specific resident by its ID."
     )
     def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
+        resident = self.get_object()
+        self.perform_destroy(resident)
+        return Response({
+            "message": "Resident deleted successfully."
+        }, status=status.HTTP_204_NO_CONTENT)
 
-class ResidentViewSet(viewsets.ModelViewSet):
-    queryset = Resident.objects.all()
-    serializer_class = ResidentSerializer
 
-    @swagger_auto_schema(
-        operation_description="Get anonymized list of residents",
-        responses={200: 'A list of anonymized residents'}
-    )
-    @action(detail=False, methods=['get'])
-    def anonymized(self, request):
-        residents = Resident.objects.all().values('room__number')
-        anonymized_residents = [{'room_number': res['room__number']} for res in residents]
-        return Response(anonymized_residents)
 
 class MaintenanceRequestViewSet(viewsets.ModelViewSet):
     queryset = MaintenanceRequest.objects.all()
     serializer_class = MaintenanceRequestSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     @swagger_auto_schema(
         operation_summary="List all maintenance requests",
@@ -253,19 +320,24 @@ class MaintenanceRequestViewSet(viewsets.ModelViewSet):
     )
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
-# class MaintenanceRequestViewSet(viewsets.ModelViewSet):
-#     queryset = MaintenanceRequest.objects.all()
-#     serializer_class = MaintenanceRequestSerializer
+    
+
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+    permission_classes = [permissions.IsAuthenticated]  
 
     @swagger_auto_schema(
         operation_summary="List all events",
         operation_description="Retrieve a list of all events."
     )
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        events = self.queryset
+        serializer = self.get_serializer(events, many=True)
+        return Response({
+            "message": "Events retrieved successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Create a new event",
@@ -274,7 +346,13 @@ class EventViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_201_CREATED: EventSerializer}
     )
     def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response({
+            "message": "Event created successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
         operation_summary="Retrieve an event",
@@ -282,7 +360,12 @@ class EventViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_200_OK: EventSerializer}
     )
     def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+        event = self.get_object()
+        serializer = self.get_serializer(event)
+        return Response({
+            "message": "Event retrieved successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Update an event",
@@ -291,7 +374,14 @@ class EventViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_200_OK: EventSerializer}
     )
     def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+        event = self.get_object()
+        serializer = self.get_serializer(event, data=request.data, partial=False)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response({
+            "message": "Event updated successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Partial update an event",
@@ -300,27 +390,42 @@ class EventViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_200_OK: EventSerializer}
     )
     def partial_update(self, request, *args, **kwargs):
-        return super().partial_update(request, *args, **kwargs)
+        event = self.get_object()
+        serializer = self.get_serializer(event, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response({
+            "message": "Event partially updated successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Delete an event",
         operation_description="Delete a specific event by its ID."
     )
     def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
-# class EventViewSet(viewsets.ModelViewSet):
-#     queryset = Event.objects.all()
-#     serializer_class = EventSerializer
+        event = self.get_object()
+        self.perform_destroy(event)
+        return Response({
+            "message": "Event deleted successfully."
+        }, status=status.HTTP_204_NO_CONTENT)
+
 class AnnouncementViewSet(viewsets.ModelViewSet):
     queryset = Announcement.objects.all()
     serializer_class = AnnouncementSerializer
+    permission_classes = [permissions.IsAuthenticated] 
 
     @swagger_auto_schema(
         operation_summary="List all announcements",
         operation_description="Retrieve a list of all announcements."
     )
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        announcements = self.queryset
+        serializer = self.get_serializer(announcements, many=True)
+        return Response({
+            "message": "Announcements retrieved successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Create a new announcement",
@@ -329,7 +434,13 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_201_CREATED: AnnouncementSerializer}
     )
     def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response({
+            "message": "Announcement created successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
         operation_summary="Retrieve an announcement",
@@ -337,7 +448,12 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_200_OK: AnnouncementSerializer}
     )
     def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+        announcement = self.get_object()
+        serializer = self.get_serializer(announcement)
+        return Response({
+            "message": "Announcement retrieved successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Update an announcement",
@@ -346,7 +462,14 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_200_OK: AnnouncementSerializer}
     )
     def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+        announcement = self.get_object()
+        serializer = self.get_serializer(announcement, data=request.data, partial=False)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response({
+            "message": "Announcement updated successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Partial update an announcement",
@@ -355,25 +478,70 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_200_OK: AnnouncementSerializer}
     )
     def partial_update(self, request, *args, **kwargs):
-        return super().partial_update(request, *args, **kwargs)
+        announcement = self.get_object()
+        serializer = self.get_serializer(announcement, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response({
+            "message": "Announcement partially updated successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Delete an announcement",
         operation_description="Delete a specific announcement by its ID."
     )
     def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
-
-
-
-# User ViewSet for registration and login
+        announcement = self.get_object()
+        self.perform_destroy(announcement)
+        return Response({
+            "message": "Announcement deleted successfully."
+        }, status=status.HTTP_204_NO_CONTENT)
+    
+    
 
 from drf_yasg import openapi
 from django.contrib.auth.models import User
 from django.shortcuts import get_list_or_404
 from rest_framework.authtoken.models import Token
+from drf_yasg.views import get_schema_view
+
+swagger_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'Authorization': openapi.Schema(type=openapi.TYPE_STRING, description='Token required to access this endpoint (e.g., Token <your_token>)'),
+    },
+)
+
+security_schema = {
+    'Authorization': {
+        'type': 'apiKey',
+        'name': 'Authorization',
+        'in': 'header',
+        'description': 'Token required to access this endpoint (e.g., Token <your_token>)',
+    }
+}
+
+# Create schema view
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Your API Title",
+        default_version='v1',
+        description="API description",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="contact@yourapi.local"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+
+schema_view.security = [{'Authorization': []}]  
+
+
 
 class UserViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.AllowAny]
     @swagger_auto_schema(
         operation_summary='Register users',
         operation_description="Register new users in the system.",
@@ -431,73 +599,118 @@ class UserViewSet(viewsets.ViewSet):
             }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-
+@method_decorator(csrf_exempt, name='dispatch')
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     @swagger_auto_schema(
         operation_summary="List all payments",
-        operation_description="Retrieve a list of all payments."
+        operation_description="Retrieve a list of all payments.",
+        responses={status.HTTP_200_OK: PaymentSerializer(many=True)}
     )
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        if request.user.is_authenticated:
+            print(f"Authenticated user: {request.user.username}")
+        else:
+            print("User is not authenticated")
+        payments = self.get_queryset()
+        serializer = self.get_serializer(payments, many=True)
+        return Response({"message": "Payments retrieved successfully.", "data": serializer.data}, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Create a new payment",
         operation_description="Create a new payment in the system.",
         request_body=PaymentSerializer,
-        responses={status.HTTP_201_CREATED: PaymentSerializer}
+        responses={
+            status.HTTP_201_CREATED: PaymentSerializer,
+            status.HTTP_400_BAD_REQUEST: "Bad Request - Invalid input"
+        }
     )
     def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        payment = serializer.save()
+        return Response({"message": "Payment created successfully.", "data": PaymentSerializer(payment).data}, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
         operation_summary="Retrieve a payment",
         operation_description="Retrieve a specific payment by its ID.",
-        responses={status.HTTP_200_OK: PaymentSerializer}
+        responses={
+            status.HTTP_200_OK: PaymentSerializer,
+            status.HTTP_404_NOT_FOUND: "Not Found - Payment does not exist"
+        }
     )
     def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+        payment = self.get_object()
+        serializer = self.get_serializer(payment)
+        return Response({"message": "Payment retrieved successfully.", "data": serializer.data}, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Update a payment",
         operation_description="Update an existing payment.",
         request_body=PaymentSerializer,
-        responses={status.HTTP_200_OK: PaymentSerializer}
+        responses={
+            status.HTTP_200_OK: PaymentSerializer,
+            status.HTTP_400_BAD_REQUEST: "Bad Request - Invalid input",
+            status.HTTP_404_NOT_FOUND: "Not Found - Payment does not exist"
+        }
     )
     def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+        payment = self.get_object()
+        serializer = self.get_serializer(payment, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        updated_payment = serializer.save()
+        return Response({"message": "Payment updated successfully.", "data": PaymentSerializer(updated_payment).data}, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
-        operation_summary="Partial update a payment",
+        operation_summary="Partially update a payment",
         operation_description="Partially update a payment.",
         request_body=PaymentSerializer,
-        responses={status.HTTP_200_OK: PaymentSerializer}
+        responses={
+            status.HTTP_200_OK: PaymentSerializer,
+            status.HTTP_400_BAD_REQUEST: "Bad Request - Invalid input",
+            status.HTTP_404_NOT_FOUND: "Not Found - Payment does not exist"
+        }
     )
     def partial_update(self, request, *args, **kwargs):
-        return super().partial_update(request, *args, **kwargs)
+        payment = self.get_object()
+        serializer = self.get_serializer(payment, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        updated_payment = serializer.save()
+        return Response({"message": "Payment partially updated successfully.", "data": PaymentSerializer(updated_payment).data}, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Delete a payment",
-        operation_description="Delete a specific payment by its ID."
+        operation_description="Delete a specific payment by its ID.",
+        responses={
+            status.HTTP_204_NO_CONTENT: "No Content - Payment deleted successfully",
+            status.HTTP_404_NOT_FOUND: "Not Found - Payment does not exist"
+        }
     )
     def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
-
+        payment = self.get_object()
+        payment.delete()
+        return Response({"message": "Payment deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 
 # ViewSet for Communication
 class CommunicationViewSet(viewsets.ModelViewSet):
     queryset = Communication.objects.all()
     serializer_class = CommunicationSerializer
+    permission_classes = [permissions.IsAuthenticated]  
 
     @swagger_auto_schema(
         operation_summary="List all communications",
         operation_description="Retrieve a list of all communications."
     )
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        communications = self.queryset
+        serializer = self.get_serializer(communications, many=True)
+        return Response({
+            "message": "Communications retrieved successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Create a new communication",
@@ -506,7 +719,13 @@ class CommunicationViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_201_CREATED: CommunicationSerializer}
     )
     def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response({
+            "message": "Communication created successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
         operation_summary="Retrieve a communication",
@@ -514,7 +733,12 @@ class CommunicationViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_200_OK: CommunicationSerializer}
     )
     def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+        communication = self.get_object()
+        serializer = self.get_serializer(communication)
+        return Response({
+            "message": "Communication retrieved successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Update a communication",
@@ -523,7 +747,14 @@ class CommunicationViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_200_OK: CommunicationSerializer}
     )
     def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+        communication = self.get_object()
+        serializer = self.get_serializer(communication, data=request.data, partial=False)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response({
+            "message": "Communication updated successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Partial update a communication",
@@ -532,21 +763,33 @@ class CommunicationViewSet(viewsets.ModelViewSet):
         responses={status.HTTP_200_OK: CommunicationSerializer}
     )
     def partial_update(self, request, *args, **kwargs):
-        return super().partial_update(request, *args, **kwargs)
+        communication = self.get_object()
+        serializer = self.get_serializer(communication, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response({
+            "message": "Communication partially updated successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Delete a communication",
         operation_description="Delete a specific communication by its ID."
     )
     def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
+        communication = self.get_object()
+        self.perform_destroy(communication)
+        return Response({
+            "message": "Communication deleted successfully."
+        }, status=status.HTTP_204_NO_CONTENT)
+    
 
+from rest_framework.permissions import IsAuthenticated
 
-# ViewSet for RegistrationForResident
 class RegistrationForResidentViewSet(viewsets.ModelViewSet):
     queryset = RegistrationForResident.objects.all()
     serializer_class = RegistrationForResidentSerializer
-    # permission_classes = [IsAuthenticated]  
+    permission_classes = [IsAuthenticated]  
 
     @swagger_auto_schema(
         operation_summary="List all resident registrations",
@@ -632,26 +875,3 @@ class RegistrationForResidentViewSet(viewsets.ModelViewSet):
         registration = self.get_object() 
         registration.delete()  
         return Response({"message": "Resident registration deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_personal_data(request):
-    #fetching sensitive data and anonymizing or encrypting
-    email = request.user.email
-    encrypted_email = encrypt_data(email)
-    anonymized_email = anonymize_data(email)
-
-    return JsonResponse({
-        'email': email, 
-        'encrypted_email': encrypted_email,
-        'anonymized_email': anonymized_email
-    })
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def decrypt_personal_data(request):
-    encrypted_email = request.data.get('encrypted_email', '')
-    decrypted_email = decrypt_data(encrypted_email)
-    
-    logger.info(f"User {request.user.username} decrypted email data.")
-    
-    return JsonResponse({'decrypted_email': decrypted_email})
