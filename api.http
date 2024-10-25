@@ -134,7 +134,7 @@ Content-Type: application/json
 
 ### Delete a Resident
 DELETE http://localhost:8000/api/residents/1/
-# Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
+Authorization: Token 82baec2bf40918e2d7e0693ca936b42790caee89
 
 
 

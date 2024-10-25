@@ -84,6 +84,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "optional"
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_UNIQUE_EMAIL = True
 
 # Add REST framework settings for token authentication
 REST_FRAMEWORK = {
@@ -144,6 +145,7 @@ OAUTH2_PROVIDER = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -189,6 +191,20 @@ DATABASES = {
         'PORT': '5435',
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'residentmanagement',   # Database name
+#         'ENFORCE_SCHEMA': False,        # Set to False to allow flexible MongoDB schemas
+#         'CLIENT': {
+#             'host': 'mongodb://localhost:27017/residentmanagement',
+#             # Include authentication details if necessary:
+#             # 'username': 'your_username',
+#             # 'password': 'your_password',
+#             # 'authSource': 'admin',
+#         }
+#     }
+# }
 
 
 # Password validation
@@ -226,6 +242,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR/'assets/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
