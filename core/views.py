@@ -123,7 +123,7 @@ class BuildingViewSet(viewsets.ModelViewSet):
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
-    permission_classes = [permissions.IsAuthenticated]  
+    # permission_classes = [permissions.IsAuthenticated]  
 
     @swagger_auto_schema(
         operation_summary="List all rooms",
@@ -180,7 +180,7 @@ class RoomViewSet(viewsets.ModelViewSet):
 class ResidentViewSet(viewsets.ModelViewSet):
     queryset = Resident.objects.all()
     serializer_class = ResidentSerializer
-    permission_classes = [permissions.IsAuthenticated]  
+    # permission_classes = [permissions.IsAuthenticated]  
 
     @swagger_auto_schema(
         operation_summary="List all residents",
@@ -270,7 +270,7 @@ class ResidentViewSet(viewsets.ModelViewSet):
 class MaintenanceRequestViewSet(viewsets.ModelViewSet):
     queryset = MaintenanceRequest.objects.all()
     serializer_class = MaintenanceRequestSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
     @swagger_auto_schema(
         operation_summary="List all maintenance requests",
@@ -325,7 +325,7 @@ class MaintenanceRequestViewSet(viewsets.ModelViewSet):
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    permission_classes = [permissions.IsAuthenticated]  
+    # permission_classes = [permissions.IsAuthenticated]  
 
     @swagger_auto_schema(
         operation_summary="List all events",
@@ -413,7 +413,7 @@ class EventViewSet(viewsets.ModelViewSet):
 class AnnouncementViewSet(viewsets.ModelViewSet):
     queryset = Announcement.objects.all()
     serializer_class = AnnouncementSerializer
-    permission_classes = [permissions.IsAuthenticated] 
+    # permission_classes = [permissions.IsAuthenticated] 
 
     @swagger_auto_schema(
         operation_summary="List all announcements",
@@ -603,7 +603,7 @@ class UserViewSet(viewsets.ViewSet):
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
     @swagger_auto_schema(
         operation_summary="List all payments",
@@ -698,7 +698,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
 class CommunicationViewSet(viewsets.ModelViewSet):
     queryset = Communication.objects.all()
     serializer_class = CommunicationSerializer
-    permission_classes = [permissions.IsAuthenticated]  
+    # permission_classes = [permissions.IsAuthenticated]  
 
     @swagger_auto_schema(
         operation_summary="List all communications",
@@ -789,7 +789,7 @@ from rest_framework.permissions import IsAuthenticated
 class RegistrationForResidentViewSet(viewsets.ModelViewSet):
     queryset = RegistrationForResident.objects.all()
     serializer_class = RegistrationForResidentSerializer
-    permission_classes = [IsAuthenticated]  
+    # permission_classes = [IsAuthenticated]  
 
     @swagger_auto_schema(
         operation_summary="List all resident registrations",
