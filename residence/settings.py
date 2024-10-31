@@ -151,8 +151,7 @@ WSGI_APPLICATION = 'resident_management.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',  # Path to your SQLite database file
-    }
+        'NAME': BASE_DIR / 'db.sqlite3',  
 }
 
 # Password validation
