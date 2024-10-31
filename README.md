@@ -1,4 +1,4 @@
-## Summative Project: University Residence Management API
+## University Residence Management API
 
 ### Project Description
 
@@ -28,12 +28,6 @@ The API will be built using Django REST Framework, leveraging advanced Python co
    * Research and identify potential API endpoints that could benefit from asynchronous execution (e.g., long-running tasks, background jobs).
    * Provide a written explanation of your findings, justifying your choices for potential asynchronous implementation.
 
-**Submission:**
-
-* A functional Django project with basic models, serializers, and views.
-* A well-documented API specification.
-* A written report explaining the potential use of asynchronous programming in the project.
-
 ### [Stage-2: Enhanced Functionality](https://github.com/ALU-BSE/Summative-Project-UniNest-API/blob/stage-2/README.md) 
 
 1. **Authentication and Authorization:**
@@ -52,18 +46,6 @@ The API will be built using Django REST Framework, leveraging advanced Python co
 *  Implement caching for frequently accessed read-only data to improve API performance.
 *  Use Django's cache framework or a suitable third-party library.
 
-**Submission:**
-
-*  Updated Django project with implemented authentication, authorization, pagination, and caching features
-*  Updated API documentation reflecting the new functionalities.
-
-**Evaluation Criteria:**
-
-*  Correctness and effectiveness of authentication and authorization mechanisms
-*  Implementation of pagination and filtering
-*  Appropriate use of caching
-*  Updated and accurate API documentation
-
 ### [Stage-3: Advanced Features and Security](https://github.com/ALU-BSE/Summative-Project-UniNest-API/blob/stage-3/README.md) 
 
 1. **Personal Data Handling:**
@@ -81,18 +63,6 @@ The API will be built using Django REST Framework, leveraging advanced Python co
    * Provide clear and informative error messages to users.
    * Set up proper logging to capture errors and exceptions for debugging and monitoring.
 
-**Submission:**
-
-* Updated Django project with advanced features and security enhancements.
-* Updated API documentation reflecting the new functionalities and security measures.
-
-**Evaluation Criteria:**
-
-* Proper handling of personal data and adherence to security best practices
-* Implementation of a robust authentication service
-* Effective error handling and logging mechanisms
-* Updated and comprehensive API documentation
-
 ### [Stage-4: Testing and Refinement](https://github.com/ALU-BSE/Summative-Project-UniNest-API/blob/stage-4/README.md) 
 
 1. **Unit Tests and Integration Tests:**
@@ -108,15 +78,204 @@ The API will be built using Django REST Framework, leveraging advanced Python co
    * Finalize API documentation (Swagger) and ensure it's comprehensive and up-to-date
    * Prepare a presentation or demonstration to showcase the project, highlighting the challenges faced and the solutions implemented
 
-**Submission:**
+## API Documentation Structure
 
-* Updated Django project with implemented tests
-* Finalized and comprehensive API documentation
-* Presentation or demonstration materials
+### 1. **Introduction**
+   - **Overview**: Briefly describe the API’s purpose and functionalities.
+   - **Base URL**: Provide the base URL for the API (e.g., `https://api.universityresidence.com/v1`).
+   - **Authentication**: Outline the authentication method used (e.g., JWT, OAuth).
 
-**Evaluation Criteria:**
+### 2. **Authentication**
+   - **Login Endpoint**:
+     - **Method**: POST
+     - **Endpoint**: `/auth/login`
+     - **Request Body**:
+       ```json
+       {
+         "username": "string",
+         "password": "string"
+       }
+       ```
+     - **Responses**:
+       - **200 OK**: Successful login
+       - **401 Unauthorized**: Invalid credentials
 
-* Thoroughness and effectiveness of unit and integration tests
-* Quality and completeness of final API documentation
-* Clarity and effectiveness of project presentation or demonstration
+### 3. **Endpoints Overview**
+Provide a list of available endpoints, grouped by resource:
 
+#### 3.1. **Residents**
+- **Create Resident**
+  - **Method**: POST
+  - **Endpoint**: `/residents/`
+  - **Request Body**:
+    ```json
+    {
+      "name": "string",
+      "email": "string",
+      "phone": "string",
+      "room": "room_id"
+    }
+    ```
+  - **Responses**:
+    - **201 Created**: Resident created successfully
+    - **400 Bad Request**: Validation errors
+
+- **Retrieve Resident**
+  - **Method**: GET
+  - **Endpoint**: `/residents/{id}/`
+  - **Responses**:
+    - **200 OK**: Resident details
+    - **404 Not Found**: Resident not found
+
+- **Update Resident**
+  - **Method**: PUT
+  - **Endpoint**: `/residents/{id}/`
+  - **Request Body**:
+    ```json
+    {
+      "name": "string",
+      "email": "string",
+      "phone": "string",
+      "room": "room_id"
+    }
+    ```
+  - **Responses**:
+    - **200 OK**: Resident updated successfully
+    - **400 Bad Request**: Validation errors
+    - **404 Not Found**: Resident not found
+
+- **Delete Resident**
+  - **Method**: DELETE
+  - **Endpoint**: `/residents/{id}/`
+  - **Responses**:
+    - **204 No Content**: Successfully deleted
+    - **404 Not Found**: Resident not found
+
+#### 3.2. **Rooms**
+- **List Rooms**
+  - **Method**: GET
+  - **Endpoint**: `/rooms/`
+  - **Query Parameters**: `building`, `capacity`
+  - **Responses**:
+    - **200 OK**: List of rooms
+
+- **Create Room**
+  - **Method**: POST
+  - **Endpoint**: `/rooms/`
+  - **Request Body**:
+    ```json
+    {
+      "room_number": "string",
+      "capacity": "integer",
+      "building": "building_id"
+    }
+    ```
+  - **Responses**:
+    - **201 Created**: Room created successfully
+
+#### 3.3. **Maintenance Requests**
+- **Create Maintenance Request**
+  - **Method**: POST
+  - **Endpoint**: `/maintenance_requests/`
+  - **Request Body**:
+    ```json
+    {
+      "description": "string",
+      "resident": "resident_id",
+      "status": "string"
+    }
+    ```
+  - **Responses**:
+    - **201 Created**: Maintenance request created successfully
+
+- **Get Maintenance Request**
+  - **Method**: GET
+  - **Endpoint**: `/maintenance_requests/{id}/`
+  - **Responses**:
+    - **200 OK**: Maintenance request details
+
+### 4. **Error Handling**
+Document common error responses:
+- **400 Bad Request**: Invalid request parameters.
+- **401 Unauthorized**: Authentication required or failed.
+- **404 Not Found**: Resource not found.
+- **500 Internal Server Error**: Unexpected server error.
+
+### 5. **Rate Limiting**
+- Mention any rate limiting policies (e.g., maximum requests per minute).
+
+### 6. **Examples**
+Provide example requests and responses for key endpoints. For instance:
+#### Example of Creating a Resident
+**Request**:
+```http
+POST /residents/
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "phone": "+123456789",
+  "room": "101"
+}
+```
+**Response**:
+```http
+201 Created
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "phone": "+123456789",
+  "room": "101"
+}
+```
+
+### 7. **Versioning**
+Indicate the versioning strategy (e.g., versioning via URL path like `/v1/`).
+
+### 8. **Additional Resources**
+- Links to further documentation or user guides.
+- Contact information for support or inquiries.
+
+---
+
+## Tools for Documentation
+Consider using tools like:
+- **Swagger/OpenAPI**: For interactive documentation.
+- **Redoc**: To create beautiful documentation from OpenAPI specifications.
+- **Postman**: To create and share API documentation easily.
+
+### Example of Swagger/OpenAPI Configuration
+```yaml
+openapi: 3.0.0
+info:
+  title: University Residence Management API
+  version: 1.0.0
+paths:
+  /residents/:
+    post:
+      summary: Create a new resident
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                room:
+                  type: integer
+      responses:
+        '201':
+          description: Resident created successfully
+        '400':
+          description: Invalid input
+```
